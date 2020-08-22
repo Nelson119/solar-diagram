@@ -96,25 +96,25 @@ export default {
     return {
       statics: [
         {
-          icon: require("../static/img/icon-01.svg"),
+          icon: require("../assets/img/icon-01.svg"),
           label: "日照值",
           value: "99,999",
           unit: "W/m²"
         },
         {
-          icon: require("../static/img/icon-02.svg"),
+          icon: require("../assets/img/icon-02.svg"),
           label: "环境温度",
           value: "33.33",
           unit: "˚C"
         },
         {
-          icon: require("../static/img/icon-03.svg"),
+          icon: require("../assets/img/icon-03.svg"),
           label: "电池温度",
           value: "33.33",
           unit: "˚C"
         },
         {
-          icon: require("../static/img/icon-04.svg"),
+          icon: require("../assets/img/icon-04.svg"),
           label: "日峰值时数",
           value: "9.99",
           unit: "h"
