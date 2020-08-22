@@ -185,7 +185,7 @@ export default {
         real: {
           data: [],
           type: "bar",
-          color: "#67bff4",
+          color: "#67bff3",
           barWidth: "10",
           label: "实际发电"
         }
