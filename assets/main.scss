@@ -5,7 +5,7 @@ body {
 .app-bar {
   font-size: #{24/1920 * 100}vw;
   height: #{84/1920 * 100}vw !important;
-  background: url(/img/bg_header.png) no-repeat center/cover;
+  background: url(~static/img/bg_header.png) no-repeat center/cover;
   img {
     width: #{174/1920 * 100}vw !important;
     align-self: center;
@@ -16,7 +16,7 @@ body {
   }
 }
 .v-application--wrap {
-  background: url("/img/img.png") no-repeat center/cover;
+  background: url("~static/img/img.png") no-repeat center/cover;
 }
 .v-main {
   padding-top: #{84/1920 * 100}vw !important;
@@ -50,7 +50,7 @@ body {
   }
   .v-card {
     margin-top: #{64/1920 * 100}vw !important;
-    background: url("/img/bg_chart01_a.png") no-repeat center/105% 105%
+    background: url("~static/img/bg_chart01_a.png") no-repeat center/105% 105%
       transparent !important;
     border-radius: 8px !important;
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.25), inset 0 2px 2px 0 #75a7c7 !important;
@@ -110,7 +110,7 @@ body {
   padding-left: #{32/1920 * 100}vw !important;
   padding-right: #{16/1920 * 100}vw !important;
   canvas {
-    background: url("/img/bg_chart02_a.png") no-repeat center/105% 105%
+    background: url("~static/img/bg_chart02_a.png") no-repeat center/105% 105%
       transparent !important;
     border-radius: 8px;
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.25), inset 0 2px 2px 0 #75a7c7 !important;
@@ -126,7 +126,7 @@ body {
   padding-right: #{32/1920 * 100}vw !important;
   padding-left: #{16/1920 * 100}vw !important;
   canvas {
-    background: url("/img/bg_chart02_a.png") no-repeat center/105% 105%
+    background: url("~static/img/bg_chart02_a.png") no-repeat center/105% 105%
       transparent !important;
     border-radius: 8px;
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.25), inset 0 2px 2px 0 #75a7c7 !important;
@@ -142,7 +142,7 @@ body {
   // padding-right: #{32/1920 * 100}vw !important;
   padding-left: #{32/1920 * 100}vw !important;
   canvas {
-    background: url("/img/bg_chart03_a.png") no-repeat center/105% 105%
+    background: url("~static/img/bg_chart03_a.png") no-repeat center/105% 105%
       transparent !important;
     border-radius: 8px;
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.25), inset 0 2px 2px 0 #75a7c7 !important;
