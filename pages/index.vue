@@ -101,39 +101,6 @@ export default {
   data() {
     return {
       rawEverything: null,
-      chartData: {
-        expect: {
-          data: [],
-          type: "line",
-          color: "#ecc83c",
-          label: "预计发电",
-          shadowBlur: 1,
-          shadowColor: "rgba(0,0,0,0.50)",
-          shadowOffsetX: 0,
-          shadowOffsetY: 1
-        },
-        standar: {
-          data: [],
-          type: "line",
-          color: "#fe92a5",
-          label: "标准值",
-          shadowBlur: 1,
-          shadowColor: "rgba(0,0,0,0.50)",
-          shadowOffsetX: 0,
-          shadowOffsetY: 1
-        },
-        real: {
-          data: [],
-          type: "bar",
-          color: "#67bff3",
-          barWidth: "10",
-          label: "实际发电",
-          shadowBlur: 1,
-          shadowColor: "rgba(0,0,0,0.50)",
-          shadowOffsetX: 0,
-          shadowOffsetY: 1
-        }
-      }
     };
   },
   computed: {
@@ -249,7 +216,8 @@ export default {
     // statics()
   },
   async created() {
-    await axios.get("/mock.json").then(resp => {
+    // console.log(process.env);
+    await axios.get("mock.json").then(resp => {
       this.rawEverything = resp.data;
       this.$forceUpdate();
     });
