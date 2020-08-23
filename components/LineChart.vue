@@ -1,5 +1,32 @@
 <template>
-  <div :class="className" :style="{ height: height, width: width }" />
+  <div :class="className">
+    <v-layout>
+      <v-flex>
+        <h3>
+          {{ title }}<small>{{ unit }}</small>
+        </h3>
+      </v-flex>
+      <v-flex align-end text-right>
+        <div class="legend">
+          <img
+            v-if="chartData.real.type == 'bar'"
+            src="../assets/img/chartsign-a@3x.png"
+          />
+          <img v-else src="../assets/img/chartsign-d@3x.png" />
+          <span>实际发电</span>
+        </div>
+        <div class="legend">
+          <img src="../assets/img/chartsign-b@3x.png" />
+          <span>预计发电</span>
+        </div>
+        <div class="legend">
+          <img src="../assets/img/chartsign-c@3x.png" />
+          <span>标准值</span>
+        </div>
+      </v-flex>
+    </v-layout>
+    <div ref="chart" :style="{ height: height, width: width }" />
+  </div>
 </template>
 
 <script>
@@ -37,6 +64,10 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    unit: {
+      type: String,
+      required: true
     }
   },
   data() {
@@ -52,6 +83,7 @@ export default {
       }
     }
   },
+  computed: {},
   mounted() {
     this.$nextTick(() => {
       this.initChart();
@@ -66,7 +98,7 @@ export default {
   },
   methods: {
     initChart() {
-      this.chart = echarts.init(this.$el, "macarons");
+      this.chart = echarts.init(this.$refs.chart, "macarons");
       this.setOptions(this.chartData);
     },
     setOptions(lineChartData = {}) {
@@ -76,14 +108,22 @@ export default {
       for (const kind in lineChartData) {
         series.push({
           name: lineChartData[kind].label,
-          smooth: false,
+          smooth: true,
           type: lineChartData[kind].type,
           itemStyle: {
             normal: {
               color: lineChartData[kind].color,
+              borderColor: lineChartData[kind].color,
+              symbol: "circle",
+              symbolSize: 0,
+              borderWidth: 5,
               lineStyle: {
                 color: lineChartData[kind].color,
-                width: 2
+                width: 2,
+                shadowBlur: lineChartData[kind].shadowBlur,
+                shadowColor: lineChartData[kind].shadowColor,
+                shadowOffsetX: lineChartData[kind].shadowOffsetX,
+                shadowOffsetY: lineChartData[kind].shadowOffsetY
               },
               areaStyle: {
                 color: "transparent"
@@ -111,7 +151,7 @@ export default {
           },
           axisLine: {
             lineStyle: {
-              color: "#fff"
+              color: "#9b9b9b"
             }
           }
         },
@@ -129,7 +169,7 @@ export default {
           },
           padding: [5, 10],
           textStyle: {
-            color: "#fff"
+            color: "#9b9b9b"
           }
         },
         yAxis: {
@@ -142,24 +182,26 @@ export default {
           },
           axisLine: {
             lineStyle: {
-              color: "#fff"
+              color: "#9b9b9b"
             }
           }
         },
         legend: {
+          show: false,
           data: labels,
           right: 0,
           textStyle: {
-            color: "#fff",
+            color: "#9b9b9b",
             fontFamily: "microsoft yahei"
           }
         },
         series,
         title: {
+          show: false,
           text: this.title,
           link: "http://echarts.baidu.com/option.html#title.link",
           textStyle: {
-            color: "#fff",
+            color: "#9b9b9b",
             fontFamily: "microsoft yahei",
             height: 20,
             lineHeight: 20,

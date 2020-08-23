@@ -12,7 +12,7 @@
           <img class="icon d-block mx-auto" :src="item.icon" />
           <label class="text-center d-block">{{ item.label }}</label>
           <span class="text-center d-block"
-            >{{ item.value }}{{ item.unit }}</span
+            >{{ item.value }}<span class="unit">{{ item.unit }}</span></span
           >
         </v-flex>
       </v-layout>
@@ -44,14 +44,16 @@
               ref="lineChart"
               :chart-data="lineChartDataYear"
               :x-axis-data="xAxisDataYear"
-              title="年度发电量对比(kW-h)"
+              title="年度发电量对比"
+              unit="(kW-h)"
             />
             <LineChart
               className="small-chart"
               ref="lineChart"
               :chart-data="lineChartDataHour"
               :x-axis-data="xAxisDataHour"
-              title="今日各小时发电功率趋势(kW)"
+              title="今日各小时发电功率趋势"
+              unit="(kW)"
             />
           </div>
         </v-flex>
@@ -62,14 +64,16 @@
               ref="lineChart"
               :chart-data="lineChartDataMonth"
               :x-axis-data="xAxisDataMonth"
-              title="月发电量对比(kW-h)"
+              title="月发电量对比"
+              unit="(kW-h)"
             />
             <LineChart
               className="small-chart"
               ref="lineChart"
               :chart-data="lineChartDataQuarter"
               :x-axis-data="xAxisDataQuater"
-              title="各季度发电量对比(kW-h)"
+              title="各季度发电量对比"
+              unit="(kW-h)"
             />
           </div>
         </v-flex>
@@ -80,7 +84,8 @@
           ref="lineChart"
           :chart-data="lineChartDataDay"
           :x-axis-data="xAxisDataDay"
-          title="本月每日发电趋势比较(kW-h)"
+          title="本月每日发电趋势比较"
+          unit="(kW-h)"
         />
       </v-flex>
     </v-flex>
@@ -96,25 +101,25 @@ export default {
     return {
       statics: [
         {
-          icon: require("../assets/img/icon-01.svg"),
+          icon: require("../assets/img/icon-01@3x.png"),
           label: "日照值",
           value: "99,999",
           unit: "W/m²"
         },
         {
-          icon: require("../assets/img/icon-02.svg"),
+          icon: require("../assets/img/icon-02@3x.png"),
           label: "环境温度",
           value: "33.33",
           unit: "˚C"
         },
         {
-          icon: require("../assets/img/icon-03.svg"),
+          icon: require("../assets/img/icon-03@3x.png"),
           label: "电池温度",
           value: "33.33",
           unit: "˚C"
         },
         {
-          icon: require("../assets/img/icon-04.svg"),
+          icon: require("../assets/img/icon-04@3x.png"),
           label: "日峰值时数",
           value: "9.99",
           unit: "h"
@@ -174,20 +179,32 @@ export default {
           data: [],
           type: "line",
           color: "#ecc83c",
-          label: "预计发电"
+          label: "预计发电",
+          shadowBlur: 1,
+          shadowColor: "rgba(0,0,0,0.50)",
+          shadowOffsetX: 0,
+          shadowOffsetY: 1
         },
         standar: {
           data: [],
           type: "line",
           color: "#fe92a5",
-          label: "标准值"
+          label: "标准值",
+          shadowBlur: 1,
+          shadowColor: "rgba(0,0,0,0.50)",
+          shadowOffsetX: 0,
+          shadowOffsetY: 1
         },
         real: {
           data: [],
           type: "bar",
           color: "#67bff3",
           barWidth: "10",
-          label: "实际发电"
+          label: "实际发电",
+          shadowBlur: 1,
+          shadowColor: "rgba(0,0,0,0.50)",
+          shadowOffsetX: 0,
+          shadowOffsetY: 1
         }
       }
     };
