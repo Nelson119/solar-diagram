@@ -95,85 +95,12 @@
 <script>
 import LineChart from "@/components/LineChart.vue";
 import _ from "lodash";
+import axios from "axios";
 export default {
   components: { LineChart },
   data() {
     return {
-      statics: [
-        {
-          icon: require("../assets/img/icon-01@3x.png"),
-          label: "日照值",
-          value: "99,999",
-          unit: "W/m²"
-        },
-        {
-          icon: require("../assets/img/icon-02@3x.png"),
-          label: "环境温度",
-          value: "33.33",
-          unit: "˚C"
-        },
-        {
-          icon: require("../assets/img/icon-03@3x.png"),
-          label: "电池温度",
-          value: "33.33",
-          unit: "˚C"
-        },
-        {
-          icon: require("../assets/img/icon-04@3x.png"),
-          label: "日峰值时数",
-          value: "9.99",
-          unit: "h"
-        }
-      ],
-      score: [
-        {
-          name: "二氧化碳减排量",
-          number: "999",
-          unit: "kg"
-        },
-        {
-          name: "二氧化硫减排量",
-          number: "9,999",
-          unit: "kg"
-        },
-        {
-          name: "氮化物减排量",
-          number: "99,999",
-          unit: "kg"
-        },
-        {
-          name: "烟尘减排量",
-          number: "999,999",
-          unit: "kg"
-        },
-        {
-          name: "标准煤减排量",
-          number: "9,999,999",
-          unit: "kg"
-        }
-      ],
-      lineChartDataYear: {
-        expect: {
-          data: [null, 300000, 260000, 260000, 190000, 200000],
-          type: "line",
-          color: "#ecc83c",
-          label: "预计发电"
-        },
-        standar: {
-          data: [null, 290000, 240000, 270000, 180000, 240000],
-          type: "line",
-          color: "#fe92a5",
-          label: "标准值"
-        },
-        real: {
-          data: [null, 280000, 250000, 280000, 160000, 290000],
-          type: "bar",
-          color: "#67bff4",
-          barWidth: "10",
-          label: "实际发电"
-        }
-      },
-      xAxisDataYear: ["", 2016, 2017, 2018, 2019, 2020, ""],
+      rawEverything: null,
       chartData: {
         expect: {
           data: [],
@@ -210,184 +137,123 @@ export default {
     };
   },
   computed: {
-    xAxisDataC() {
-      const t = [];
-      return t;
+    statics() {
+      const statics = [
+        {
+          icon: require("../assets/img/icon-01@3x.png"),
+          label: "日照值"
+        },
+        {
+          icon: require("../assets/img/icon-02@3x.png"),
+          label: "环境温度"
+        },
+        {
+          icon: require("../assets/img/icon-03@3x.png"),
+          label: "电池温度"
+        },
+        {
+          icon: require("../assets/img/icon-04@3x.png"),
+          label: "日峰值时数"
+        }
+      ];
+      if (!this.rawEverything) {
+        return statics;
+      }
+      _.each(statics, (item, i) => {
+        item.value = this.rawEverything.statics[i].value;
+        item.unit = this.rawEverything.statics[i].unit;
+      });
+
+      return statics;
+    },
+    score() {
+      const score = [
+        {
+          name: "二氧化碳减排量"
+        },
+        {
+          name: "二氧化硫减排量"
+        },
+        {
+          name: "氮化物减排量"
+        },
+        {
+          name: "烟尘减排量"
+        },
+        {
+          name: "标准煤减排量"
+        }
+      ];
+      if (!this.rawEverything) {
+        return score;
+      }
+      _.each(score, (item, i) => {
+        item.number = this.rawEverything.score[i].number;
+        item.unit = this.rawEverything.score[i].unit;
+      });
+      return score;
+    },
+    renderData() {
+      const statics = _.each(this.statics, element => {
+        delete element.icon;
+        delete element.label;
+      });
+      const score = _.each(this.score, element => {
+        delete element.name;
+      });
+      return {
+        score,
+        statics,
+        dataYear: this.lineChartDataYear,
+        xAxisYear: this.xAxisDataYear,
+        dataHour: this.lineChartDataHour,
+        xAxisHour: this.xAxisDataHour,
+        dataMonth: this.lineChartDataMonth,
+        xAxisMonth: this.xAxisDataMonth,
+        dataQuarter: this.lineChartDataQuarter,
+        xAxisQuater: this.xAxisDataQuater,
+        dataDay: this.lineChartDataDay,
+        xAxisDay: this.xAxisDataDay
+      };
+    },
+    lineChartDataYear() {
+      return this.rawEverything ? this.rawEverything.dataYear : null;
+    },
+    xAxisDataYear() {
+      return this.rawEverything ? this.rawEverything.xAxisYear : [];
     },
     lineChartDataHour() {
-      let chartData = _.cloneDeep(this.chartData);
-
-      chartData.expect.data.push(null);
-      chartData.standar.data.push(null);
-      chartData.real.data.push(null);
-      chartData.real.type = "line";
-      for (let i = 4; i < 21; i++) {
-        switch (i) {
-          case 5:
-            chartData.expect.data.push(160);
-            chartData.standar.data.push(140);
-            chartData.real.data.push(130);
-            break;
-          case 9:
-            chartData.expect.data.push(140);
-            chartData.standar.data.push(140);
-            chartData.real.data.push(170);
-            break;
-          case 12:
-            chartData.expect.data.push(169);
-            chartData.standar.data.push(120);
-            chartData.real.data.push(110);
-            break;
-          case 16:
-            chartData.expect.data.push(100);
-            chartData.standar.data.push(90);
-            chartData.real.data.push(200);
-            break;
-          case 19:
-            chartData.expect.data.push(200);
-            chartData.standar.data.push(340);
-            chartData.real.data.push(220);
-            break;
-          default:
-            break;
-        }
-      }
-      return chartData;
+      return this.rawEverything ? this.rawEverything.dataHour : null;
     },
     xAxisDataHour() {
-      const hours = [];
-
-      hours.push("");
-      for (let i = 5; i < 21; i++) {
-        switch (i) {
-          case 5:
-          case 9:
-          case 12:
-          case 16:
-          case 19:
-            hours.push(`${i}:00`);
-            break;
-          default:
-            break;
-        }
-      }
-      hours.push("");
-      return hours;
+      return this.rawEverything ? this.rawEverything.xAxisHour : [];
     },
     lineChartDataMonth() {
-      let chartData = _.cloneDeep(this.chartData);
-
-      for (let i = 0; i <= 13; i++) {
-        switch (i) {
-          case 0:
-          case 13:
-            chartData.expect.data.push(null);
-            chartData.standar.data.push(null);
-            chartData.real.data.push(null);
-            break;
-
-          default:
-            chartData.expect.data.push(25000 * Math.random());
-            chartData.standar.data.push(25000 * Math.random());
-            chartData.real.data.push(25000 * Math.random());
-            break;
-        }
-      }
-      return chartData;
+      return this.rawEverything ? this.rawEverything.dataMonth : null;
     },
     xAxisDataMonth() {
-      const months = [];
-      months.push("");
-      for (let i = 1; i <= 12; i++) {
-        months.push(`${i}月`);
-      }
-      months.push("");
-      return months;
+      return this.rawEverything ? this.rawEverything.xAxisMonth : [];
     },
     lineChartDataQuarter() {
-      let chartData = _.cloneDeep(this.chartData);
-
-      for (let i = 0; i < 5; i++) {
-        switch (i) {
-          case 1:
-            chartData.expect.data.push(160);
-            chartData.standar.data.push(140);
-            chartData.real.data.push(130);
-            break;
-          case 2:
-            chartData.expect.data.push(140);
-            chartData.standar.data.push(140);
-            chartData.real.data.push(170);
-            break;
-          case 3:
-            chartData.expect.data.push(169);
-            chartData.standar.data.push(120);
-            chartData.real.data.push(110);
-            break;
-          case 4:
-            chartData.expect.data.push(100);
-            chartData.standar.data.push(90);
-            chartData.real.data.push(200);
-            break;
-          default:
-            chartData.expect.data.push(null);
-            chartData.standar.data.push(null);
-            chartData.real.data.push(null);
-            break;
-        }
-      }
-      return chartData;
+      return this.rawEverything ? this.rawEverything.dataQuarter : null;
     },
     xAxisDataQuater() {
-      const quaters = [];
-      quaters.push("");
-      quaters.push("第一季度");
-      quaters.push("第二季度");
-      quaters.push("第三季度");
-      quaters.push("第四季度");
-      quaters.push("");
-      return quaters;
+      return this.rawEverything ? this.rawEverything.xAxisQuater : [];
     },
     lineChartDataDay() {
-      let chartData = _.cloneDeep(this.chartData);
-
-      const today = new Date();
-      const oneDay = 1000 * 60 * 60 * 24;
-      let currentDay = new Date(today * 1 - (today.getDate() - 1) * oneDay);
-      let overMonth = false;
-      chartData.expect.data.push(null);
-      chartData.standar.data.push(null);
-      chartData.real.data.push(null);
-      chartData.real.type = "line";
-      while (currentDay.getMonth() == today.getMonth()) {
-        chartData.expect.data.push(1000 * Math.random());
-        chartData.standar.data.push(1000 * Math.random());
-        chartData.real.data.push(1000 * Math.random());
-        currentDay = new Date(currentDay * 1 + oneDay);
-      }
-
-      chartData.expect.data.push(null);
-      chartData.standar.data.push(null);
-      chartData.real.data.push(null);
-      return chartData;
+      return this.rawEverything ? this.rawEverything.dataDay : null;
     },
     xAxisDataDay() {
-      const today = new Date();
-      const oneDay = 1000 * 60 * 60 * 24;
-      let currentDay = new Date(today * 1 - (today.getDate() - 1) * oneDay);
-      let overMonth = false;
-      const days = [];
-      days.push("");
-      while (currentDay.getMonth() == today.getMonth()) {
-        days.push(
-          `${Number(currentDay.getMonth() + 1)}/${Number(currentDay.getDate())}`
-        );
-        currentDay = new Date(currentDay * 1 + oneDay);
-      }
-
-      days.push("");
-      return days;
+      return this.rawEverything ? this.rawEverything.xAxisDay : [];
     }
+    // statics()
+  },
+  async created() {
+    await axios.get("/mock.json").then(resp => {
+      this.rawEverything = resp.data;
+      this.$forceUpdate();
+    });
+    // console.log(rawEverything);
   }
 };
 </script>

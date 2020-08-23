@@ -9,7 +9,7 @@
       <v-flex align-end text-right>
         <div class="legend">
           <img
-            v-if="chartData.real.type == 'bar'"
+            v-if="chartData && chartData.real && chartData.real.type == 'bar'"
             src="../assets/img/chartsign-a@3x.png"
           />
           <img v-else src="../assets/img/chartsign-d@3x.png" />
@@ -54,12 +54,10 @@ export default {
       default: true
     },
     chartData: {
-      type: Object,
-      required: true
+      type: Object
     },
     xAxisData: {
-      type: Array,
-      required: true
+      type: Array
     },
     title: {
       type: String,
@@ -79,7 +77,11 @@ export default {
     chartData: {
       deep: true,
       handler(val) {
-        this.setOptions(val);
+        console.log("this.chartData", this.chartData);
+        if (this.chartData && this.xAxisData) {
+          this.setOptions(val);
+          this.$forceUpdate();
+        }
       }
     }
   },
@@ -120,17 +122,17 @@ export default {
               lineStyle: {
                 color: lineChartData[kind].color,
                 width: 2,
-                shadowBlur: lineChartData[kind].shadowBlur,
-                shadowColor: lineChartData[kind].shadowColor,
-                shadowOffsetX: lineChartData[kind].shadowOffsetX,
-                shadowOffsetY: lineChartData[kind].shadowOffsetY
+                shadowBlur: 1,
+                shadowColor: "rgba(0,0,0,0.50)",
+                shadowOffsetX: 0,
+                shadowOffsetY: 1
               },
               areaStyle: {
                 color: "transparent"
               }
             }
           },
-          data: lineChartData[kind].data,
+          data: [null, ...lineChartData[kind].data],
           animationDuration: 2800,
           animationEasing: "quadraticOut",
           barWidth: lineChartData[kind].barwidth,
@@ -138,83 +140,86 @@ export default {
         });
         labels.push(lineChartData[kind].label);
       }
-      this.chart.setOption({
-        xAxis: {
-          data: this.xAxisData,
-          boundaryGap: false,
-          axisTick: {
-            show: false
+      if (this.chart) {
+        this.chart.setOption({
+          xAxis: {
+            data: ["", ...this.xAxisData, ""],
+            boundaryGap: false,
+            axisTick: {
+              show: false
+            },
+            nameTextStyle: {
+              color: "#9b9b9b",
+              fontFamily: "microsoft yahei"
+            },
+            axisLine: {
+              lineStyle: {
+                color: "#9b9b9b"
+              }
+            }
           },
-          nameTextStyle: {
-            color: "#9b9b9b",
-            fontFamily: "microsoft yahei"
+          grid: {
+            left: 10,
+            right: 10,
+            bottom: 20,
+            top: 30,
+            containLabel: true
           },
-          axisLine: {
-            lineStyle: {
+          tooltip: {
+            show: false,
+            trigger: "axis",
+            axisPointer: {
+              type: "cross"
+            },
+            padding: [5, 10],
+            textStyle: {
               color: "#9b9b9b"
             }
-          }
-        },
-        grid: {
-          left: 10,
-          right: 10,
-          bottom: 20,
-          top: 30,
-          containLabel: true
-        },
-        tooltip: {
-          trigger: "axis",
+          },
+          yAxis: {
+            axisTick: {
+              show: false
+            },
+            nameTextStyle: {
+              color: "#9b9b9b",
+              fontFamily: "microsoft yahei"
+            },
+            axisLine: {
+              lineStyle: {
+                color: "#9b9b9b"
+              }
+            }
+          },
+          legend: {
+            show: false,
+            data: labels,
+            right: 0,
+            textStyle: {
+              color: "#9b9b9b",
+              fontFamily: "microsoft yahei"
+            }
+          },
+          series,
+          title: {
+            show: false,
+            text: this.title,
+            link: "http://echarts.baidu.com/option.html#title.link",
+            textStyle: {
+              color: "#9b9b9b",
+              fontFamily: "microsoft yahei",
+              height: 20,
+              lineHeight: 20,
+              fontSize: `${(24 / 1920) * 100}vw`
+            }
+          },
           axisPointer: {
-            type: "cross"
-          },
-          padding: [5, 10],
-          textStyle: {
-            color: "#9b9b9b"
-          }
-        },
-        yAxis: {
-          axisTick: {
-            show: false
-          },
-          nameTextStyle: {
-            color: "#9b9b9b",
-            fontFamily: "microsoft yahei"
-          },
-          axisLine: {
-            lineStyle: {
-              color: "#9b9b9b"
+            link: { xAxisIndex: "all" },
+            label: {
+              backgroundColor: "rgba(0,0,0,0.6)"
             }
           }
-        },
-        legend: {
-          show: false,
-          data: labels,
-          right: 0,
-          textStyle: {
-            color: "#9b9b9b",
-            fontFamily: "microsoft yahei"
-          }
-        },
-        series,
-        title: {
-          show: false,
-          text: this.title,
-          link: "http://echarts.baidu.com/option.html#title.link",
-          textStyle: {
-            color: "#9b9b9b",
-            fontFamily: "microsoft yahei",
-            height: 20,
-            lineHeight: 20,
-            fontSize: `${(24 / 1920) * 100}vw`
-          }
-        },
-        axisPointer: {
-          link: { xAxisIndex: "all" },
-          label: {
-            backgroundColor: "rgba(0,0,0,0.6)"
-          }
-        }
-      });
+        });
+      }
     }
   }
 };
