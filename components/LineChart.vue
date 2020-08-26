@@ -129,7 +129,15 @@ export default {
               },
               areaStyle: {
                 color: "transparent"
-              }
+              },
+              ...(function(){
+                return lineChartData[kind].type == 'bar'? {
+                  shadowBlur: 0 ,
+                  shadowColor: rgba(0, 0, 0, 0.33) ,
+                  shadowOffsetX: 1 ,
+                  shadowOffsetY: 1 ,
+                }:{};
+              })
             }
           },
           data: [null, ...lineChartData[kind].data],
