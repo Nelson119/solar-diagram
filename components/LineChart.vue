@@ -77,7 +77,7 @@ export default {
     chartData: {
       deep: true,
       handler(val) {
-        console.log("this.chartData", this.chartData);
+        // console.log("this.chartData", this.chartData);
         if (this.chartData && this.xAxisData) {
           this.setOptions(val);
           this.$forceUpdate();
@@ -118,7 +118,7 @@ export default {
               borderColor: lineChartData[kind].color,
               symbol: "circle",
               symbolSize: 0,
-              borderWidth: 5,
+              // borderWidth: 5,
               lineStyle: {
                 color: lineChartData[kind].color,
                 width: 2,
@@ -131,13 +131,19 @@ export default {
                 color: "transparent"
               },
               ...(function(){
+                return lineChartData[kind].type == 'line'? {
+                  borderWidth: 5,
+                }:{};
+              }()),
+              ...(function(){
                 return lineChartData[kind].type == 'bar'? {
                   shadowBlur: 0 ,
-                  shadowColor: rgba(0, 0, 0, 0.33) ,
+                  shadowColor: 'rgba(0, 0, 0, 0.33) ',
                   shadowOffsetX: 1 ,
                   shadowOffsetY: 1 ,
+                  borderWidth: 0,
                 }:{};
-              })
+              }())
             }
           },
           data: [null, ...lineChartData[kind].data],
