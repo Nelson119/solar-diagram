@@ -96,6 +96,7 @@
 import LineChart from "@/components/LineChart.vue";
 import _ from "lodash";
 import axios from "axios";
+import mockData from "../static/mock.json";
 export default {
   components: { LineChart },
   data() {
@@ -108,20 +109,20 @@ export default {
       const statics = [
         {
           icon: require("../assets/img/icon-01@3x.png"),
-          label: "日照值"
+          label: "日照值",
         },
         {
           icon: require("../assets/img/icon-02@3x.png"),
-          label: "环境温度"
+          label: "环境温度",
         },
         {
           icon: require("../assets/img/icon-03@3x.png"),
-          label: "电池温度"
+          label: "电池温度",
         },
         {
           icon: require("../assets/img/icon-04@3x.png"),
-          label: "日峰值时数"
-        }
+          label: "日峰值时数",
+        },
       ];
       if (!this.rawEverything) {
         return statics;
@@ -136,20 +137,20 @@ export default {
     score() {
       const score = [
         {
-          name: "二氧化碳减排量"
+          name: "二氧化碳减排量",
         },
         {
-          name: "二氧化硫减排量"
+          name: "二氧化硫减排量",
         },
         {
-          name: "氮化物减排量"
+          name: "氮化物减排量",
         },
         {
-          name: "烟尘减排量"
+          name: "烟尘减排量",
         },
         {
-          name: "标准煤减排量"
-        }
+          name: "标准煤减排量",
+        },
       ];
       if (!this.rawEverything) {
         return score;
@@ -161,11 +162,11 @@ export default {
       return score;
     },
     renderData() {
-      const statics = _.each(this.statics, element => {
+      const statics = _.each(this.statics, (element) => {
         delete element.icon;
         delete element.label;
       });
-      const score = _.each(this.score, element => {
+      const score = _.each(this.score, (element) => {
         delete element.name;
       });
       return {
@@ -180,7 +181,7 @@ export default {
         dataQuarter: this.lineChartDataQuarter,
         xAxisQuater: this.xAxisDataQuater,
         dataDay: this.lineChartDataDay,
-        xAxisDay: this.xAxisDataDay
+        xAxisDay: this.xAxisDataDay,
       };
     },
     lineChartDataYear() {
@@ -212,16 +213,21 @@ export default {
     },
     xAxisDataDay() {
       return this.rawEverything ? this.rawEverything.xAxisDay : [];
-    }
+    },
     // statics()
   },
   async created() {
     // console.log(process.env);
-    await axios.get("mock.json").then(resp => {
-      this.rawEverything = resp.data;
-      this.$forceUpdate();
-    });
+    await axios
+      .get("mock.json")
+      .then((resp) => {
+        this.rawEverything = resp.data;
+        this.$forceUpdate();
+      })
+      .catch(() => {
+        this.rawEverything = mockData;
+      });
     // console.log(rawEverything);
-  }
+  },
 };
 </script>

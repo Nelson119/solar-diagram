@@ -1,16 +1,28 @@
 import colors from "vuetify/es5/util/colors";
 const routerBase =
   process.env.DEPLOY_ENV === "GH_PAGES"
-    ? {
+    ? //打包 github page
+      {
         base: "/solar-diagram/"
       }
-    : {};
+    : //打包 相對路徑
+      // : {
+      //     base: "./",
+      //     mode: "hash"
+      //   };
+      //本機執行
+      {};
 const publicPath =
   process.env.DEPLOY_ENV === "GH_PAGES"
     ? {
         publicPath: "js"
       }
-    : {};
+    : //打包 相對路徑
+      // {
+      //   publicPath: "js"
+      // };
+      //本機執行
+      {};
 export default {
   /*
    ** Nuxt rendering mode
